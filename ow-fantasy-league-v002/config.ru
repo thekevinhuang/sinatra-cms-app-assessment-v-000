@@ -5,4 +5,10 @@ if ActiveRecord::Migrator.needs_migration?
 end
 
 use Rack::MethodOverride
+use HeroesController
+use LeaguesController
+use PlayersController
+use RostersController
+use TeamsController
+use UsersController
 run ApplicationController

@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    <title>OverWatch GM</title>
+  </head>
+  <body>
+    <div align="right" id="links">
+      <%if logged_in?%>
+        Welcome, <%=current_user.username%>!<br>
+        <a href="/team/edit">Modify Team</a> <br>
+        <a href="/users/<%=current_user.slug%>">Your Profile</a> <br>
+        <a href="/logout">Log Out</a>
+      <%else%>
+        <a href="/login">Login</a> <br>
+        <a href="/signup">Sign Up</a>
+      <%end%>
+    </div>
+
+    <div class="container">
+      <%=yield%>
+    </div>
+
+  </body>
+</html>
