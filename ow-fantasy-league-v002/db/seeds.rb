@@ -1,7 +1,7 @@
-hero_list = ["Tracer","Reaper","Doomfist","McCree"
+hero_list = ["Tracer","Reaper","Doomfist","McCree",
             "Soldier 76","Sombra","Pharah","Genji",
             "Junkrat","Hanzo","Widowmaker","Torbjorn",
-            "Mei","Bastion","Winston","D.Va","Reinhardt","Zarya","Orisa","Roadhog"
+            "Mei","Bastion","Winston","D.Va","Reinhardt","Zarya","Orisa","Roadhog",
             "Mercy","Ana","Symmetra","Lucio","Zenyatta","Brigitte","Moira"]
 
 hero_list.each do |name|
@@ -10,7 +10,7 @@ hero_list.each do |name|
   hero.save
 end
 
-team_list = ["New York Excelsior","Los Angeles Valiant","Seoul Dynasty","London Spitfire","Shanghai Dragons","Houston Outlaws"
+team_list = ["New York Excelsior","Los Angeles Valiant","Seoul Dynasty","London Spitfire","Shanghai Dragons","Houston Outlaws",
             "Florida Mayhem","Boston Uprising","Dallas Fuel","Los Angeles Gladiators","Philadelphia Fusion",
           "San Francisco Shock"]
 
@@ -57,4 +57,4 @@ player_list.each do |player,team|
 end
 
 jjonak = Player.find_by(name: "Jjonak")
-jjonak.hero << Hero.find_by(name: "Zenyatta")
+jjonak.heroes << Hero.find_by(name: "Zenyatta")
