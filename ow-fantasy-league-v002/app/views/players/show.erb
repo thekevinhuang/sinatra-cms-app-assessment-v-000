@@ -1,0 +1,17 @@
+<h2><%=@player.name%> Page</h2>
+
+<h3><%=@player.name%>'s Team</h3>
+<a href="/teams/<%=@player.team.slug%>"><%=@player.team.name%></a>
+
+<br><br>
+
+<h3><%=@player.name%>'s Hero(es)</h3>
+  <%if @player.heroes.empty?%>
+    Updating...
+  <%else%>
+    <ul>
+        <%@player.heroes.each do |hero|%>
+          <li><a href="/heroes/<%=hero.slug%>"><%=hero.name%></a></li>
+        <%end%>
+    </ul>
+  <%end%>
