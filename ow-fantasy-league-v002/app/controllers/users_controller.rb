@@ -1,10 +1,10 @@
 class UsersController < ApplicationController
 
-  get '/' do
+  get '/' do #main page with a welcome
     erb :main
   end
 
-  get '/login' do
+  get '/login' do #login page
     if !logged_in?
       erb :'/users/login'
     else
@@ -12,7 +12,7 @@ class UsersController < ApplicationController
     end
   end
 
-  post '/login' do
+  post '/login' do #logs in user
     user = User.find_by(username: params[:username])
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
@@ -22,7 +22,7 @@ class UsersController < ApplicationController
     end
   end
 
-  get '/signup' do
+  get '/signup' do #signs new user up/creates user
     if !logged_in?
       erb :'/users/create_user'
     else
@@ -30,19 +30,19 @@ class UsersController < ApplicationController
     end
   end
 
-  post '/signup' do
+  post '/signup' do #actually posts new user
     user = User.new(username: params[:username], email: params[:email], password: params[:password])
 
     if user.save
       session[:user_id] = user.id
-      redirect "/users/:slug"
+      redirect "/users/#{current_user.slug}"
     else
       redirect "/signup"
     end
   end
 
-  get '/users/:slug' do
-
+  get '/users/:slug' do #shows user page WIP
+    erb :'/users/show'
   end
 
 end
