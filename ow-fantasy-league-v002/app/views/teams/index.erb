@@ -1,1 +1,7 @@
-list of teams
+<h2>List of Teams in the OW League</h2>
+
+<ul>
+  <%@teams.each do |team|%>
+    <li><a href="/teams/<%=team.slug%>"><%=team.name%></a></li>
+  <%end%>
+</ul>

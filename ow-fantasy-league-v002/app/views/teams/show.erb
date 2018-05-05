@@ -1,0 +1,7 @@
+<h2><%=@team.name%> Team Page</h2>
+
+<ul>
+  <%@team.players.each do |player|%>
+    <li><a href="/players/<%=player.slug%>"><%=player.name%></a></li>
+  <%end%>
+</ul>
