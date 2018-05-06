@@ -1,6 +1,8 @@
 class LeaguesController < ApplicationController
   get '/leagues' do
     #shows a current list of all the existing leagues
+    @all_leagues = League.all
+    erb :'/leagues/index'
   end
 
   get 'leagues/new' do

@@ -1,1 +1,9 @@
-List of Leagues
+<h2>List of Leagues</h2>
+
+<a href="/leagues/new">Create a new League</a>
+
+<ul>
+  <%@all_leagues.each do |league|%>
+    <li><a href="/leagues/<%=league.id%>"><%=league.name%></a></li>
+  <%end%>
+</ul>
