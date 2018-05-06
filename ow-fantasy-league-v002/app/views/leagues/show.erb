@@ -1,0 +1,16 @@
+<h2><%=@league.name%> Page</h2>
+
+<h3>Current Members:</h3>
+<ul>
+  <%@league.users.each do |user|%>
+    <li><a href="/users/<%=user.slug%>"><%=user.username%></a></li>
+  <%end%>
+</ul>
+
+
+<h3>List of Rosters:</h3>
+<ul>
+  <%@league.rosters.each do |roster|%>
+    <li><a href="/rosters/<%=roster.id%>"><%=roster.name%></a></li>
+  <%end%>
+</ul>
