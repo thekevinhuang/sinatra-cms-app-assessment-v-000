@@ -6,14 +6,19 @@
   <body>
     <div align="right" id="links">
       <%if logged_in?%>
+        <a href="/leagues">Leagues</a>
+        <a href="/teams">List of Teams</a>
+        <a href="/players">List of Players</a><br><br>
         Welcome, <%=current_user.username%>!<br>
         <a href="/users/<%=current_user.slug%>">Your Profile</a> <br>
+
         <a href="/logout">Log Out</a>
       <%else%>
         <a href="/login">Login</a> <br>
         <a href="/signup">Sign Up</a>
       <%end%>
     </div>
+
 
     <div class="container">
       <%=yield%>
