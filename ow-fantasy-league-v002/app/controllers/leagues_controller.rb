@@ -12,7 +12,8 @@ class LeaguesController < ApplicationController
 
   post '/leagues/new' do
     new_league = League.new(name: params[:league_name])
-    if params[:league_name]=="join"
+
+    if params[:join_league]=="join"
       new_league.users << current_user
     end
     new_league.save
@@ -28,5 +29,11 @@ class LeaguesController < ApplicationController
 
   get '/leagues/:id/join' do
     #adds current user to league
+    join_league = League.find_by(id: params[:id])
+    if !join_league.users.include?(current_user)
+      join_league.users << current_user
+      join_league.save
+    end
+    redirect "/leagues/#{join_league.id}"
   end
 end
