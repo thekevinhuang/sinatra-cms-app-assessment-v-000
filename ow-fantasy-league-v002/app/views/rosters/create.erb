@@ -1,0 +1,8 @@
+<h2>Hello, <%=current_user.username%>, Create a New Roster!</h2>
+
+<form method="POST" action="/leagues/<%=@league.id%>/rosters/new">
+  <label for="rosterName">Roster Name</label><br>
+  <input type="text" name="roster_name" id="rosterName"><br><br>
+
+  <input type="submit" value="Create">
+</form>
