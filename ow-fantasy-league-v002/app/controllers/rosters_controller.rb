@@ -29,11 +29,13 @@ class RostersController < ApplicationController
     @league = League.find_by(id: params[:id])
     rost = Roster.new(name: params[:roster_name])
     rost.league = @league
+    rost.user = current_user
     rost.save
     redirect "/rosters/#{rost.id}"
   end
 
   get '/rosters/:id' do #shows a specific roster with players
+    @rost = Roster.find_by(id: params[:id])
     erb :'/rosters/show'
   end
 

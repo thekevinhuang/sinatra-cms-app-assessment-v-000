@@ -22,3 +22,9 @@
     <li><a href="/rosters/<%=roster.id%>"><%=roster.name%></a></li>
   <%end%>
 </ul>
+
+<br>
+
+<%if (current_user.rosters & @league.rosters).empty? & @league.users.include?(current_user)%>
+  <a href="/leagues/<%=@league.id%>/rosters/new">Add a new Roster!</a>
+<%end%>

@@ -1,1 +1,12 @@
-This is a roster!
+<h2><%=@rost.user.username%>'s Roster: <%=@rost.name%></h2>
+
+This Roster's League: <a href="/leagues/<%=@rost.league.id%>"><%=@rost.league.name%></a>
+
+<br><br>
+Current Players:
+
+<ul>
+  <%@rost.players.each do |play|%>
+    <li><a href="/players/<%=play.slug%>"><%=play.name%></a></li>
+  <%end%>
+</ul>
