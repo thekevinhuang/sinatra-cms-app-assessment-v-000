@@ -37,4 +37,35 @@ class LeaguesController < ApplicationController
     end
     redirect "/leagues/#{join_league.id}"
   end
+
+  get '/leagues/:id/edit' do
+    @league = League.find_by(id: params[:id])
+
+    erb :'/leagues/edit'
+  end
+
+  patch '/leagues/:id/edit' do
+    league = League.find_by(id: params[:id])
+
+    if !params[:league_name].empty?
+      league.update(name: params[:league_name])
+      league.save
+      redirect "/leagues/#{league.id}"
+    end
+    redirect "/leagues/#{league.id}/edit"
+  end
+
+  delete '/leagues/:id' do
+    league = League.find_by(id: params[:id])
+
+    if logged_in?
+      if league.users.include?(current_user)
+        league.delete
+      end
+        redirect "/leagues"
+    else
+      redirect "/login"
+    end
+  end
+
 end

@@ -1,0 +1,10 @@
+<h2>Rename League!</h2>
+
+<form method="POST" action="/leagues/<%=@league.id%>/edit">
+  <input type="hidden" name="_method" value="PATCH">
+
+  <label for="leagueName">League Name</label><br>
+  <input type="text" name="league_name" id="leagueName" value="<%=@league.name%>"><br><br>
+
+  <input type="submit" value="Edit">
+</form>

@@ -12,6 +12,13 @@
 <%if !@league.users.include?(current_user)%>
   <br>
   <a href="/leagues/<%=@league.id%>/join">Join League</a>
+<%else%>
+  <br>
+  <form  action="/leagues/<%=@league.id%>" method="post">
+    <input type="hidden" name="_method" value="DELETE">
+
+    <input type="submit" value="Delete League">
+  </form>
 <%end%>
 
 <br>
