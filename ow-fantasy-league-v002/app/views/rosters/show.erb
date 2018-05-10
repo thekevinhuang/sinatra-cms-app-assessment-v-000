@@ -7,7 +7,7 @@ Current Players:
 
 <ul>
   <%@rost.players.each do |play|%>
-    <li><a href="/players/<%=play.slug%>"><%=play.name%></a> - <a href="/rosters/<%=@rost.id%>/player/<%=play.slug%>/edit">Edit</a></li>
+    <li><a href="/players/<%=play.slug%>"><%=play.name%></a> - <a href="/rosters/<%=@rost.id%>/player/<%=play.slug%>/edit">Edit</a> - <a href="/rosters/<%=@rost.id%>/player/<%=play.slug%>/delete">Delete</a></li>
   <%end%>
 </ul>
 

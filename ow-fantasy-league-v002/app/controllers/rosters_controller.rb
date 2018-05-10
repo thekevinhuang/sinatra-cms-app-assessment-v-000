@@ -74,4 +74,12 @@ class RostersController < ApplicationController
     end
     redirect "/rosters/#{@rost.id}"
   end
+
+  get '/rosters/:id/player/:slug/delete' do
+    @rost = Roster.find_by(id: params[:id])
+
+    @rost.players.delete(Player.find_by_slug(params[:slug]))
+
+    redirect "/rosters/#{@rost.id}"
+  end
 end
