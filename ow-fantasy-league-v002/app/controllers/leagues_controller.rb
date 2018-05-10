@@ -16,6 +16,7 @@ class LeaguesController < ApplicationController
     if params[:join_league]=="join"
       new_league.users << current_user
     end
+
     new_league.save
     redirect "/leagues/#{new_league.id}"
   end

@@ -34,12 +34,44 @@ class RostersController < ApplicationController
     redirect "/rosters/#{rost.id}"
   end
 
+  get '/rosters/:id/player_add' do
+    @rost = Roster.find_by(id: params[:id])
+    @all_team = Team.all
+    erb :'/rosters/add'
+  end
+
   get '/rosters/:id' do #shows a specific roster with players
     @rost = Roster.find_by(id: params[:id])
     erb :'/rosters/show'
   end
 
-  get '/rosters/:id/edit' do #allows user to edit roster, if roster belongs to them
 
+
+  post '/rosters/:id/player_add' do
+    @rost = Roster.find_by(id: params[:id])
+    player = Player.find_by_slug(params[:player])
+    if player
+      @rost.players << player
+      @rost.save
+    end
+    redirect "/rosters/#{@rost.id}"
+  end
+
+  get '/rosters/:id/player/:slug/edit' do #allows user to edit roster, if roster belongs to them
+    @rost = Roster.find_by(id: params[:id])
+    @player = Player.find_by_slug(params[:slug])
+    @all_team = Team.all
+    erb :'/rosters/edit'
+  end
+
+  post '/rosters/:id/player/:slug/edit' do
+    @rost = Roster.find_by(id: params[:id])
+    player = Player.find_by_slug(params[:player])
+    if player
+      @rost.players.delete(Player.find_by_slug(params[:slug]))
+      @rost.players << player
+      @rost.save
+    end
+    redirect "/rosters/#{@rost.id}"
   end
 end

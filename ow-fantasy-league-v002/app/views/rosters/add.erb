@@ -1,10 +1,10 @@
-<h2>Edit the Player!</h2>
+<h2>Add a player to your Roster!</h2>
 
-<form action="/rosters/<%=@rost.id%>/player/<%=@player.slug%>/edit" method="post">
+<form action="/rosters/<%=@rost.id%>/player_add" method="post">
   <%current_players = []%>
   <%@rost.league.rosters.each do |roster|%>
     <%roster.players.each do |player|%>
-      <%current_players << player if player !=@player%>
+      <%current_players << player%>
     <%end%>
   <%end%>
 
@@ -12,7 +12,7 @@
     <%=team.name%>:<br>
     <%team.players.each do |player|%>
       <% if !current_players.include?(player)%>
-        <input type="radio" name="player" value="<%=player.slug%>" <%='checked' if player==@player%>><%=player.name%>
+        <input type="radio" name="player" value="<%=player.slug%>"><%=player.name%>
       <%end%>
     <%end%>
     <br><br>
