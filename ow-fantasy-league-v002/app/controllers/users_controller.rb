@@ -42,7 +42,12 @@ class UsersController < ApplicationController
   end
 
   get '/users/:slug' do #shows user page WIP
-    erb :'/users/show'
+    if logged_in?
+      erb :'/users/show'
+    else
+      redirect "/login"
+    end
+
   end
 
   get '/logout' do

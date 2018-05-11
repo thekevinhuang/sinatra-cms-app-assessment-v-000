@@ -1,12 +1,20 @@
 class HeroesController < ApplicationController
   get '/heroes' do
-    @all_heroes = Hero.all
-    erb :'/heroes/index'
+    if logged_in?
+      @all_heroes = Hero.all
+      erb :'/heroes/index'
+    else
+      redirect "/login"
+    end
   end
 
   get '/heroes/:slug' do
-    @hero = Hero.find_by_slug(params[:slug])
-    erb :'/heroes/show'
-    #show a specific hero
+    if logged_in?
+      @hero = Hero.find_by_slug(params[:slug])
+      erb :'/heroes/show'
+      #show a specific hero
+    else
+      redirect "/login"
+    end
   end
 end
