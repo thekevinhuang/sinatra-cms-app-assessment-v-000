@@ -1,6 +1,7 @@
 <%= flash[:message] %>
 
-<h2><%=@league.name%> Page</h2>
+<h2><%=@league.name%> League Page </h2>
+<a href="/leagues/<%=@league.id%>/edit">Edit League Name</a>
 
 <h3>Current Members:</h3>
 <ul>
@@ -13,7 +14,7 @@
   <br>
   <a href="/leagues/<%=@league.id%>/join">Join League</a>
 <%else%>
-  <br>
+  <br><br><br>
   <form  action="/leagues/<%=@league.id%>" method="post">
     <input type="hidden" name="_method" value="DELETE">
 
