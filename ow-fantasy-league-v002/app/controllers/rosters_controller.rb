@@ -20,7 +20,7 @@ class RostersController < ApplicationController
       redirect "/login"
     end
     #allows user to create a new roster in a league they have joined
-    
+
     #checks if current_user is a member of the current league & does not have a roster belonging to the league
 
   end
@@ -37,7 +37,12 @@ class RostersController < ApplicationController
   get '/rosters/:id/player_add' do
     @rost = Roster.find_by(id: params[:id])
     @all_team = Team.all
-    erb :'/rosters/add'
+    if @rost.players.size >=6
+      flash[:message] = "You already have a full roster"
+      redirect "/rosters/#{@rost.id}"
+    else
+      erb :'/rosters/add'
+    end
   end
 
   get '/rosters/:id' do #shows a specific roster with players
@@ -45,14 +50,19 @@ class RostersController < ApplicationController
     erb :'/rosters/show'
   end
 
-
-
   post '/rosters/:id/player_add' do
     @rost = Roster.find_by(id: params[:id])
     player = Player.find_by_slug(params[:player])
-    if player
-      @rost.players << player
-      @rost.save
+    if @rost.players.size <6
+      if player
+        @rost.players << player
+        @rost.save
+        flash[:message] = "#{player.name} added to roster"
+      else
+        flash[:message] = "The player you are trying to add doesn't exist"
+      end
+    else
+      flash[:message] = "You have a full roster already."
     end
     redirect "/rosters/#{@rost.id}"
   end
@@ -66,20 +76,24 @@ class RostersController < ApplicationController
 
   post '/rosters/:id/player/:slug/edit' do
     @rost = Roster.find_by(id: params[:id])
-    player = Player.find_by_slug(params[:player])
-    if player
-      @rost.players.delete(Player.find_by_slug(params[:slug]))
-      @rost.players << player
+    new_player = Player.find_by_slug(params[:player])
+    if new_player
+      old_player = Player.find_by_slug(params[:slug])
+      @rost.players.delete(old_player)
+      @rost.players << new_player
       @rost.save
+      flash[:message] = "#{old_player.name} replaced with #{new_player.name} in roster"
     end
     redirect "/rosters/#{@rost.id}"
   end
 
   get '/rosters/:id/player/:slug/delete' do
     @rost = Roster.find_by(id: params[:id])
+    player = Player.find_by_slug(params[:slug])
 
-    @rost.players.delete(Player.find_by_slug(params[:slug]))
+    @rost.players.delete(player)
 
+    flash[:message] = "#{player.name} removed from the roster"
     redirect "/rosters/#{@rost.id}"
   end
 end

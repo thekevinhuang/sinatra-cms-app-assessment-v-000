@@ -1,13 +1,22 @@
 class LeaguesController < ApplicationController
+
   get '/leagues' do
     #shows a current list of all the existing leagues
-    @all_leagues = League.all
-    erb :'/leagues/index'
+    if logged_in?
+      @all_leagues = League.all
+      erb :'/leagues/index'
+    else
+      redirect "/login"
+    end
   end
 
   get '/leagues/new' do
     #allows a user to create a new league
-    erb :'/leagues/create'
+    if logged_in?
+      erb :'/leagues/create'
+    else
+      redirect "/login"
+    end
   end
 
   post '/leagues/new' do
@@ -23,25 +32,39 @@ class LeaguesController < ApplicationController
 
   get '/leagues/:id' do
     #shows a specific league with all the rosters
-    @league = League.find_by(id: params[:id])
-
-    erb :'/leagues/show'
+    if logged_in?
+      @league = League.find_by(id: params[:id])
+      erb :'/leagues/show'
+    else
+      redirect "/login"
+    end
   end
 
   get '/leagues/:id/join' do
     #adds current user to league
-    join_league = League.find_by(id: params[:id])
-    if !join_league.users.include?(current_user)
-      join_league.users << current_user
-      join_league.save
+    if logged_in?
+      join_league = League.find_by(id: params[:id])
+      if !join_league.users.include?(current_user)
+        join_league.users << current_user
+        join_league.save
+      end
+      redirect "/leagues/#{join_league.id}"
+    else
+      redirect "/login"
     end
-    redirect "/leagues/#{join_league.id}"
   end
 
   get '/leagues/:id/edit' do
-    @league = League.find_by(id: params[:id])
-
-    erb :'/leagues/edit'
+    if logged_in?
+      @league = League.find_by(id: params[:id])
+      if @league.user == current_user
+        erb :'/leagues/edit'
+      else
+        redirect "/leagues/#{@league.id}"
+      end
+    else
+      redirect "/login"
+    end
   end
 
   patch '/leagues/:id/edit' do
