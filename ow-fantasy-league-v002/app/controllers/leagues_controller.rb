@@ -22,6 +22,8 @@ class LeaguesController < ApplicationController
   post '/leagues/new' do
     new_league = League.new(name: params[:league_name])
 
+    new_league.creator_user_id = current_user.id
+
     if params[:join_league]=="join"
       new_league.users << current_user
     end
@@ -57,8 +59,13 @@ class LeaguesController < ApplicationController
   get '/leagues/:id/edit' do
     if logged_in?
       @league = League.find_by(id: params[:id])
-      if @league.user == current_user
-        erb :'/leagues/edit'
+      if @league.users.include?(current_user)
+        if @league.creator_user_id == current_user.id
+          erb :'/leagues/edit'
+        else
+          flash[:message] = "You aren't the creator of the league so you cannot edit"
+          redirect "/leagues/#{@league.id}"
+        end
       else
         redirect "/leagues/#{@league.id}"
       end
@@ -82,8 +89,10 @@ class LeaguesController < ApplicationController
     league = League.find_by(id: params[:id])
 
     if logged_in?
-      if league.users.include?(current_user)
+      if league.creator_user_id == current_user.id
         league.delete
+      else
+        flash[:message] = "You didn't create the league and cannot delete it"
       end
         redirect "/leagues"
     else
