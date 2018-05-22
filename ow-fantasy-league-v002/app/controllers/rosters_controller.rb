@@ -38,17 +38,32 @@ class RostersController < ApplicationController
   get '/rosters/:id/player_add' do
     @rost = Roster.find_by(id: params[:id])
     @all_team = Team.all
-    if @rost.players.size >=6
-      flash[:message] = "You already have a full roster"
-      redirect "/rosters/#{@rost.id}"
+    if @rost.user == current_user
+      if @rost.players.size >=6
+        flash[:message] = "You already have a full roster"
+        redirect "/rosters/#{@rost.id}"
+      else
+        erb :'/rosters/add'
+      end
     else
-      erb :'/rosters/add'
+      flash[:message] = "The roster you are trying to add players to is not yours"
+      redirect "/users/#{current_user.slug}"
     end
   end
 
   get '/rosters/:id' do #shows a specific roster with players
-    @rost = Roster.find_by(id: params[:id])
-    erb :'/rosters/show'
+    if logged_in?
+      @rost = Roster.find_by(id: params[:id])
+      if @rost.user == current_user
+        erb :'/rosters/show'
+      else
+        flash[:message] = "The roster you are trying to view is not yours"
+        redirect "/users/#{current_user.slug}"
+      end
+    else
+      flash[:message] = "You need to be logged in to visit that page"
+      redirect "/login"
+    end
   end
 
   post '/rosters/:id/player_add' do
