@@ -76,13 +76,21 @@ class LeaguesController < ApplicationController
 
   patch '/leagues/:id/edit' do
     league = League.find_by(id: params[:id])
-
-    if !params[:league_name].empty?
-      league.update(name: params[:league_name])
-      league.save
-      redirect "/leagues/#{league.id}"
+    if logged_in?
+      if league.creator_user_id == current_user.id
+        if !params[:league_name].empty?
+          league.update(name: params[:league_name])
+          league.save
+          redirect "/leagues/#{league.id}"
+        end
+        redirect "/leagues/#{league.id}/edit"
+      else
+        flash[:message] = "You aren't the creator of the league so you cannot edit"
+        redirect "/leagues/#{league.id}"
+      end
+    else
+      redirect "/login"
     end
-    redirect "/leagues/#{league.id}/edit"
   end
 
   delete '/leagues/:id' do
