@@ -69,25 +69,41 @@ class RostersController < ApplicationController
   post '/rosters/:id/player_add' do
     @rost = Roster.find_by(id: params[:id])
     player = Player.find_by_slug(params[:player])
-    if @rost.players.size <6
-      if player
-        @rost.players << player
-        @rost.save
-        flash[:message] = "#{player.name} added to roster"
+
+    if @rost.user == current_user
+      if @rost.players.size <6
+        if player
+          @rost.players << player
+          @rost.save
+          flash[:message] = "#{player.name} added to roster"
+        else
+          flash[:message] = "The player you are trying to add doesn't exist"
+        end
       else
-        flash[:message] = "The player you are trying to add doesn't exist"
+        flash[:message] = "You have a full roster already."
       end
+      redirect "/rosters/#{@rost.id}"
     else
-      flash[:message] = "You have a full roster already."
+      flash[:message] = "The roster you are trying to view is not yours"
+      redirect "/users/#{current_user.slug}"
     end
-    redirect "/rosters/#{@rost.id}"
   end
 
   get '/rosters/:id/player/:slug/edit' do #allows user to edit roster, if roster belongs to them
     @rost = Roster.find_by(id: params[:id])
     @player = Player.find_by_slug(params[:slug])
     @all_team = Team.all
-    erb :'/rosters/edit'
+    if logged_in?
+      if @rost.user == current_user
+        erb :'/rosters/edit'
+      else
+        flash[:message] = "The roster you are trying to view is not yours"
+        redirect "/users/#{current_user.slug}"
+      end
+    else
+      flash[:message] = "You need to be logged in to visit that page"
+      redirect "/login"
+    end
   end
 
   post '/rosters/:id/player/:slug/edit' do
@@ -104,12 +120,21 @@ class RostersController < ApplicationController
   end
 
   get '/rosters/:id/player/:slug/delete' do
-    @rost = Roster.find_by(id: params[:id])
-    player = Player.find_by_slug(params[:slug])
+    if logged_in?
+      @rost = Roster.find_by(id: params[:id])
+      player = Player.find_by_slug(params[:slug])
+      if @rost.user == current_user
+        @rost.players.delete(player)
 
-    @rost.players.delete(player)
-
-    flash[:message] = "#{player.name} removed from the roster"
-    redirect "/rosters/#{@rost.id}"
+        flash[:message] = "#{player.name} removed from the roster"
+        redirect "/rosters/#{@rost.id}"
+      else
+        flash[:message] = "The roster you are trying to view is not yours"
+        redirect "/users/#{current_user.slug}"
+      end
+    else
+      flash[:message] = "You need to be logged in to visit that page"
+      redirect "/login"
+    end
   end
 end
