@@ -4,6 +4,7 @@ class HeroesController < ApplicationController
       @all_heroes = Hero.all
       erb :'/heroes/index'
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
   end
@@ -14,6 +15,7 @@ class HeroesController < ApplicationController
       erb :'/heroes/show'
       #show a specific hero
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
   end

@@ -6,6 +6,7 @@ class LeaguesController < ApplicationController
       @all_leagues = League.all
       erb :'/leagues/index'
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
   end
@@ -15,6 +16,7 @@ class LeaguesController < ApplicationController
     if logged_in?
       erb :'/leagues/create'
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
   end
@@ -38,6 +40,7 @@ class LeaguesController < ApplicationController
       @league = League.find_by(id: params[:id])
       erb :'/leagues/show'
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
   end
@@ -52,6 +55,7 @@ class LeaguesController < ApplicationController
       end
       redirect "/leagues/#{join_league.id}"
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
   end
@@ -70,6 +74,7 @@ class LeaguesController < ApplicationController
         redirect "/leagues/#{@league.id}"
       end
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
   end
@@ -89,6 +94,7 @@ class LeaguesController < ApplicationController
         redirect "/leagues/#{league.id}"
       end
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
   end
@@ -104,6 +110,7 @@ class LeaguesController < ApplicationController
       end
         redirect "/leagues"
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
   end

@@ -17,6 +17,7 @@ class RostersController < ApplicationController
         redirect "/leagues/#{@league.id}"
       end
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
     #allows user to create a new roster in a league they have joined

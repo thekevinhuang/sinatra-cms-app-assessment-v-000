@@ -5,6 +5,7 @@ class PlayersController < ApplicationController
       @players = Player.all
       erb :'/players/index'
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
   end
@@ -15,6 +16,7 @@ class PlayersController < ApplicationController
       @player = Player.find_by_slug(params[:slug])
       erb :'/players/show'
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
   end

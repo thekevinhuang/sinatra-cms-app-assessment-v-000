@@ -4,6 +4,7 @@ class TeamsController < ApplicationController
       @teams = Team.all
       erb :'/teams/index'
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
   end
@@ -13,6 +14,7 @@ class TeamsController < ApplicationController
       @team = Team.find_by_slug(params[:slug])
       erb :'/teams/show'
     else
+      flash[:message] = "You need to be logged in to visit that page"
       redirect "/login"
     end
   end
