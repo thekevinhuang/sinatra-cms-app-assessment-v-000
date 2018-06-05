@@ -27,27 +27,42 @@ class RostersController < ApplicationController
   end
 
   post '/leagues/:id/rosters/new' do
-    @league = League.find_by(id: params[:id])
-    rost = Roster.new(name: params[:roster_name])
-    rost.league = @league
-    rost.user = current_user
-    rost.save
-    redirect "/rosters/#{rost.id}"
+    if logged_in?
+
+      @league = League.find_by(id: params[:id])
+      if current_user.leagues.include?(@league)
+        rost = Roster.new(name: params[:roster_name])
+        rost.league = @league
+        rost.user = current_user
+        rost.save
+        redirect "/rosters/#{rost.id}"
+      else
+        redirect "/leagues"
+      end
+    else
+      flash[:message] = "You need to be logged in to visit that page"
+      redirect "/login"
+    end
   end
 
   get '/rosters/:id/player_add' do
-    @rost = Roster.find_by(id: params[:id])
-    @all_team = Team.all
-    if @rost.user == current_user
-      if @rost.players.size >=6
-        flash[:message] = "You already have a full roster"
-        redirect "/rosters/#{@rost.id}"
+    if logged_in?
+      @rost = Roster.find_by(id: params[:id])
+      @all_team = Team.all
+      if @rost.user == current_user
+        if @rost.players.size >=6
+          flash[:message] = "You already have a full roster"
+          redirect "/rosters/#{@rost.id}"
+        else
+          erb :'/rosters/add'
+        end
       else
-        erb :'/rosters/add'
+        flash[:message] = "The roster you are trying to add players to is not yours"
+        redirect "/users/#{current_user.slug}"
       end
     else
-      flash[:message] = "The roster you are trying to add players to is not yours"
-      redirect "/users/#{current_user.slug}"
+      flash[:message] = "You need to be logged in to visit that page"
+      redirect "/login"
     end
   end
 
@@ -67,25 +82,30 @@ class RostersController < ApplicationController
   end
 
   post '/rosters/:id/player_add' do
-    @rost = Roster.find_by(id: params[:id])
-    player = Player.find_by_slug(params[:player])
+    if logged_in?
+      @rost = Roster.find_by(id: params[:id])
+      player = Player.find_by_slug(params[:player])
 
-    if @rost.user == current_user
-      if @rost.players.size <6
-        if player
-          @rost.players << player
-          @rost.save
-          flash[:message] = "#{player.name} added to roster"
+      if @rost.user == current_user
+        if @rost.players.size <6
+          if player
+            @rost.players << player
+            @rost.save
+            flash[:message] = "#{player.name} added to roster"
+          else
+            flash[:message] = "The player you are trying to add doesn't exist"
+          end
         else
-          flash[:message] = "The player you are trying to add doesn't exist"
+          flash[:message] = "You have a full roster already."
         end
+        redirect "/rosters/#{@rost.id}"
       else
-        flash[:message] = "You have a full roster already."
+        flash[:message] = "The roster you are trying to view is not yours"
+        redirect "/users/#{current_user.slug}"
       end
-      redirect "/rosters/#{@rost.id}"
     else
-      flash[:message] = "The roster you are trying to view is not yours"
-      redirect "/users/#{current_user.slug}"
+      flash[:message] = "You need to be logged in to visit that page"
+      redirect "/login"
     end
   end
 
@@ -107,16 +127,21 @@ class RostersController < ApplicationController
   end
 
   post '/rosters/:id/player/:slug/edit' do
-    @rost = Roster.find_by(id: params[:id])
-    new_player = Player.find_by_slug(params[:player])
-    if new_player
-      old_player = Player.find_by_slug(params[:slug])
-      @rost.players.delete(old_player)
-      @rost.players << new_player
-      @rost.save
-      flash[:message] = "#{old_player.name} replaced with #{new_player.name} in roster"
+    if logged_in?
+      @rost = Roster.find_by(id: params[:id])
+      new_player = Player.find_by_slug(params[:player])
+      if new_player
+        old_player = Player.find_by_slug(params[:slug])
+        @rost.players.delete(old_player)
+        @rost.players << new_player
+        @rost.save
+        flash[:message] = "#{old_player.name} replaced with #{new_player.name} in roster"
+      end
+      redirect "/rosters/#{@rost.id}"
+    else
+      flash[:message] = "You need to be logged in to visit that page"
+      redirect "/login"
     end
-    redirect "/rosters/#{@rost.id}"
   end
 
   get '/rosters/:id/player/:slug/delete' do
