@@ -22,16 +22,26 @@ class LeaguesController < ApplicationController
   end
 
   post '/leagues/new' do
-    new_league = League.new(name: params[:league_name])
+    if logged_in?
+      if !params[:league_name].empty?
+        new_league = League.new(name: params[:league_name])
 
-    new_league.creator_user_id = current_user.id
+        new_league.creator_user_id = current_user.id
 
-    if params[:join_league]=="join"
-      new_league.users << current_user
+        if params[:join_league]=="join"
+          new_league.users << current_user
+        end
+
+        new_league.save
+        redirect "/leagues/#{new_league.id}"
+      else
+        flash[:message] = "You need to enter a name for the League!"
+        redirect "/leagues/new"
+      end
+    else
+      flash[:message] = "You need to be logged in to visit that page"
+      redirect "/login"
     end
-
-    new_league.save
-    redirect "/leagues/#{new_league.id}"
   end
 
   get '/leagues/:id' do

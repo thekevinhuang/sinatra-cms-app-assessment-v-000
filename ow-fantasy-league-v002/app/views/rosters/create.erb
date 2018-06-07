@@ -1,3 +1,4 @@
+<%= flash[:message] %>
 <h2>Hello, <%=current_user.username%>, Create a New Roster!</h2>
 
 <form method="POST" action="/leagues/<%=@league.id%>/rosters/new">

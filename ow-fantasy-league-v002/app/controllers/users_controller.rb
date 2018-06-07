@@ -38,6 +38,7 @@ class UsersController < ApplicationController
       session[:user_id] = user.id
       redirect "/users/#{current_user.slug}"
     else
+      flash[:message] = "Please ensure that you filled out all fields."
       redirect "/signup"
     end
   end
