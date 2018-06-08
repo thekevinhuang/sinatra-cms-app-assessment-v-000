@@ -31,11 +31,16 @@ class RostersController < ApplicationController
 
       @league = League.find_by(id: params[:id])
       if current_user.leagues.include?(@league)
-        rost = Roster.new(name: params[:roster_name])
-        rost.league = @league
-        rost.user = current_user
-        rost.save
-        redirect "/rosters/#{rost.id}"
+        if !params[:roster_name].empty?
+          rost = Roster.new(name: params[:roster_name])
+          rost.league = @league
+          rost.user = current_user
+          rost.save
+          redirect "/rosters/#{rost.id}"
+        else
+          flash[:message] = "You need to enter a name for the Roster"
+          redirect "/leagues/#{params[:id]}/rosters/new"
+        end
       else
         redirect "/leagues"
       end
