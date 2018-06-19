@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
     has_many :leagues, through: :user_leagues
     has_many :rosters, through: :leagues
 
+    has_many :rost, class_name: "Roster", foreign_key: "user_id"
+
     def slug
       slug_name = self.username.gsub(' ', '-')
       slug_name = slug_name.gsub(/[^-a-zA-Z0-9$_.+!*()]/, "")
