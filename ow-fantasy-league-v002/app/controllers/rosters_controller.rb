@@ -6,7 +6,7 @@ class RostersController < ApplicationController
 
       if current_user.leagues.include?(@league)
         #check if current user is in this league
-        @roster = @league.rosters && current_user.rosters
+        @roster = current_user.rosters
         binding.pry
         if !@roster.empty? #checks the intersection of the rosters in the league and the user's rosters
           redirect "/rosters/#{@roster.first.id}"
