@@ -33,9 +33,7 @@ class RostersController < ApplicationController
       @league = League.find_by(id: params[:id])
       if current_user.leagues.include?(@league)
         if !params[:roster_name].empty?
-          rost = Roster.new(name: params[:roster_name])
-          rost.league = @league
-          rost.user = current_user
+          rost = Roster.new(name: params[:roster_name], league: @league, user: current_user)
           rost.save
           redirect "/rosters/#{rost.id}"
         else
